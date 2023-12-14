@@ -1,0 +1,18 @@
+---
+capacity:
+  admin_email: a.metwalli@groupeonepoint.com
+  basename: testcapa
+  sku: F2
+  module_enabled: true
+  tags:
+  workspaces:
+  - name: testWorkspace
+    users:
+    - displayName: John Doe
+      emailAddres: j.doe@chanel.com
+      graphId: ''
+      groupUserAccessRight: Admin
+      identifier: f089354e-8366-4e18-aea3-4cb4a3a50b48
+      principalType: App
+      profile: displayName
+      userType: ''

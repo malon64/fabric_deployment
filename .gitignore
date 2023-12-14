@@ -1,0 +1,14 @@
+# Environment variables
+.env
+
+# Terraform files
+
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/.terraform.tfstate.lock.info
+terraform/plan
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Python files
+powerbi/__pycache__/
