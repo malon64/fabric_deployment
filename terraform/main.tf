@@ -21,7 +21,7 @@ module "fabric_capacity" {
   location = var.location
   sku = local.yaml_capacity.sku
   admin_email = local.yaml_capacity.admin_email
-  module_enabled = local.yaml_capacity.module_enabled
+  module_enabled = true
   tags = local.yaml_capacity.tags
 
 }

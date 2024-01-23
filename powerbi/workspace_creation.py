@@ -5,25 +5,11 @@ from powerbi.api_calls import get_all_workspaces, get_capacities, get_capacity_i
 
 # https://learn.microsoft.com/en-us/rest/api/power-bi/capacities
 
-# create a workspace (group)
-# POST https://api.powerbi.com/v1.0/myorg/groups?workspaceV2={workspaceV2}
-# workspaceV2: boolean -> Whether to create a workspace. The only supported value is true.
-# body : name: string -> The name of the newly created group
-
-# Delete a workspace
-# DELETE https://api.powerbi.com/v1.0/myorg/groups/{groupId}
-
-# Add a user to the workspace
-# POST https://api.powerbi.com/v1.0/myorg/groups/{groupId}/users
-
-
-# assign workspace to capacity
-# POST https://api.powerbi.com/v1.0/myorg/groups/{groupId}/AssignToCapacity
-# capacityId: string    -> The capacity ID. To unassign from a capacity, use an empty GUID (00000000-0000-0000-0000-000000000000).
-
 parser = argparse.ArgumentParser(description="A program for creating workspaces in a given capacity", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-t', '--token')
-parser.add_argument('-c', '--capacity')
+parser.add_argument('-c', '--capacity_name')
+parser.add_argument('-a', '--capacity_azure_id')
+
 
 args = parser.parse_args()
 token = f'Bearer {args.token}'
@@ -57,7 +43,7 @@ for capacity in capacities['value']:
     printCapacity(capacity)
 
 #This capacity id is not the same Id given by Azure so we need to retrieve it with the capacity name (which is unique)
-capacityId = get_capacity_id_by_name(capacities['value'], args.capacity)
+capacityId = get_capacity_id_by_name(capacities['value'], args.capacity_name)
 
 
 workspaces = get_all_workspaces(token).json()
@@ -74,7 +60,9 @@ for workspace in workspaces['value']:
 
 with open('../capacity_config.yml', 'r+') as file:
     config = yaml.safe_load(file)
+    config["capacity"]["azure_id"] = args.capacity_azure_id
     config["capacity"]["powerbi_id"] = capacityId
+    config["capacity"]["name"] = args.capacity_name
     # Create workspaces
     for workspace in config["capacity"]["workspaces"]:
         workspace_created = create_workspace(workspace["name"], token).json()
